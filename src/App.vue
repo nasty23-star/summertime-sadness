@@ -5,14 +5,14 @@
 <div class="movie-list">
 <li v-for="movie in movies" :key="movie">
  
-<div @click="addLikes(index)">
+<div>
   <p>Number: {{movie.index}}</p>
   <p>Title: {{movie.title}}</p>
   <p>Year: {{movie.year}}</p>
   <p>Link:
   <a target="blank" :href="`${movie.href}`">more</a>
   </p>
- <p>Likes: {{likes}}</p>
+
 </div>
 
 </li>
@@ -56,7 +56,7 @@ name: 'app',
 data() {
   return {
   
-   likes: null,
+  
    
  movies: [
       {title: "Matrix", year: "1999", index: "1", href: "https://www.imdb.com/title/tt0133093/"},
@@ -83,10 +83,7 @@ data() {
   }
 },
  methods: {
-  addLikes() {
-
-  },
-
+ 
 
  }
 }
