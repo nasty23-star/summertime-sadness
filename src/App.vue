@@ -3,7 +3,7 @@
 <header-my></header-my>
 
 <div class="movie-list">
-<li v-for="movie in movies" :key="movie">
+<li v-for="(movie, index) in $store.state.movies" :key="index">
  
 <div>
   <p>Number: {{movie.index}}</p>
@@ -23,6 +23,9 @@
 
 
 <h2>Guest movie list</h2>
+<div class="show-wrap">
+<button class="show" @click="showList()">show list</button>
+</div>
 <div class="guest-list">
 <TransitionGroup name="list">
   <li v-for="guest in guests" :key="guest">
@@ -55,35 +58,27 @@ export default {
 name: 'app',
 data() {
   return {
+  movies: [],
+ movie: {title: "", year: "", index: "", link: ""},
   
-  
-   
- movies: [
-      {title: "Matrix", year: "1999", index: "1", href: "https://www.imdb.com/title/tt0133093/"},
-      {title: "ARQ", year: "2016", index: "2", href: "https://www.imdb.com/title/tt5640450/"},
-      {title: "F.A.Q. about Time Travel", year: "2009", index: "3", href: "https://www.imdb.com/title/tt0910554/"},
-     {title: "Train to Busan", year: "2016", index: "4", href: "https://www.imdb.com/title/tt5700672/"},
-       {title: "Europa Report", year: "2013", index: "5", href: "https://www.imdb.com/title/tt2051879/"},
-        {title: "Chappie", year: "2015", index: "6", href: "https://www.imdb.com/title/tt1823672/"},
-       {title: "District 9", year: "2009", index: "7", href: "https://www.imdb.com/title/tt1136608/"},
-       {title: "Source Code", year: "2011", index: "8", href: "https://www.imdb.com/title/tt0945513/"},
-        {title: "Triangle", year: "2009", index: "9", href: "https://www.imdb.com/title/tt0434409/"},
-       {title: "Time Lapse", year: "2014", index: "10", href: "https://www.imdb.com/title/tt0434409/"},  
-        {title: "Palm Springs", year: "2021", index: "11", href: "https://www.imdb.com/title/tt0434409/"},
-        {title: "V For Vendetta ", year: "2005", index: "12", href: "https://www.imdb.com/title/tt0434409/"},
-        {title: "Moon", year: "2009", index: "13", href: "https://www.imdb.com/title/tt1182345/"},
-        {title: "Eternal Sunshine of the Spotless Mind", year: "2004", index: "14", href: "https://www.imdb.com/title/tt0338013/"},
-        {title: "Timecrimes", year: "2007", index: "15", href: "https://www.imdb.com/title/tt0480669/"},
-        {title: "Prospect", year: "2018", index: "16", href: "https://www.imdb.com/title/tt7946422/"},
-        {title: "Mr.Nobody", year: "2009", index: "17", href: "https://www.imdb.com/title/tt0485947/"},
-        {title: "Gattaca", year: "1997", index: "18", href: "https://www.imdb.com/title/tt0119177/"}
-     ],
-    
-    movie: {title: "", year: "", index: "", link: ""},
+   guests: []
+ 
   }
 },
  methods: {
- 
+ showList() {
+   fetch("https://pros-e5cee-default-rtdb.asia-southeast1.firebasedatabase.app/guests.json").then((response) => {
+if (response.ok) {
+ return response.json();
+}
+   }).then((data) => {
+    const guests = []
+    for (const id in data) {
+      guests.push({id: id, title: data[id].title});
+    }
+    this.guests = guests
+   })
+ }
 
  }
 }
@@ -181,12 +176,15 @@ h2:hover {
   width: 100%;
     background-color: white;
     color: black;
-
+   
   
 }
 .guest-list li {
+
+  display: flex;
+  justify-content: left;
   width: 90%;
-   height: 20px;
+   height: 30px;
 font-family:'Courier New', Courier, monospace;
 display: flex;
 justify-content: left;
@@ -194,6 +192,7 @@ justify-content: left;
 padding-top: 10px;
 padding-bottom: 25px;
 margin-left: 5%;
+ overflow: auto;
 }
 .list-enter-active,
 .list-leave-active {
@@ -208,7 +207,42 @@ margin-left: 5%;
   font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   transition: 3s ease;
 }
-
+.show-wrap {
+ margin: 0 auto;
+ padding-top: 20px;
+ padding-bottom: 20px;
+ position: relative;
+}
+.show {
+   background: #000;
+  color: #fff;
+  z-index: 1;
+  margin: 20px;
+  outline: none;
+  height: 40px;
+  width: 200px;
+}
+.show:after {
+  position: absolute;
+  content: "";
+  width: 100%;
+  height: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+   background: #e0e5ec;
+  transition: all 1s ease;
+}
+.show:hover {
+  color: #000;
+}
+.show:hover:after {
+  top: 0;
+  height: 100%;
+}
+.show:active {
+  top: 2px;
+}
 
 
 

@@ -16,9 +16,7 @@ return {
 }
   },
   methods: {
-  addLikes() {
-
-  },
+  
 submit() {
  
   if (this.newItem.length !== 0)
@@ -29,6 +27,16 @@ submit() {
   index: this.guests.length+1
   
   })
+  fetch("https://pros-e5cee-default-rtdb.asia-southeast1.firebasedatabase.app/guests.json", {
+    method: 'POST',
+    header: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({
+      title: this.newItem,
+    
+    })
+  });
  this.newItem = ""
 }}
   }
